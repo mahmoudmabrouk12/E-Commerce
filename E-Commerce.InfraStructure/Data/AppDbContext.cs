@@ -9,9 +9,9 @@ namespace E_Commerce.InfraStructure.Data
         {
         }
 
-        DbSet<Product>   products {  get; set; }
-        DbSet<Category>  categories { get; set; }
-        DbSet<Photo>      photos { get; set; }
+       public  DbSet<Product>   Products {  get; set; }
+        public DbSet<Category>  Categories { get; set; }
+        public DbSet<Photo>      Photos { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace E_Commerce.InfraStructure.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250906215853_SeedDataIntables")]
-    partial class SeedDataIntables
+    [Migration("20250908024903_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -43,7 +43,7 @@ namespace E_Commerce.InfraStructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("categories");
+                    b.ToTable("Categories");
 
                     b.HasData(
                         new
@@ -74,7 +74,7 @@ namespace E_Commerce.InfraStructure.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Imagename")
+                    b.Property<string>("ImageName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -85,7 +85,15 @@ namespace E_Commerce.InfraStructure.Data.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("photos");
+                    b.ToTable("Photos");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ImageName = "Test",
+                            ProductId = 1
+                        });
                 });
 
             modelBuilder.Entity("E_Commerce.Core.Entites.Product.Product", b =>
@@ -109,14 +117,17 @@ namespace E_Commerce.InfraStructure.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<decimal>("Price")
+                    b.Property<decimal>("NewPrice")
                         .HasColumnType("decimal()18,2)");
+
+                    b.Property<decimal>("OldPrice")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("products");
+                    b.ToTable("Products");
 
                     b.HasData(
                         new
@@ -125,7 +136,8 @@ namespace E_Commerce.InfraStructure.Data.Migrations
                             CategoryId = 1,
                             Description = "Latest Apple smartphone with A17 chip",
                             Name = "iPhone 15",
-                            Price = 1200m
+                            NewPrice = 1200m,
+                            OldPrice = 0m
                         },
                         new
                         {
@@ -133,7 +145,8 @@ namespace E_Commerce.InfraStructure.Data.Migrations
                             CategoryId = 1,
                             Description = "Smart 4K Ultra HD LED TV",
                             Name = "Samsung TV 55\"",
-                            Price = 800m
+                            NewPrice = 800m,
+                            OldPrice = 0m
                         },
                         new
                         {
@@ -141,7 +154,8 @@ namespace E_Commerce.InfraStructure.Data.Migrations
                             CategoryId = 2,
                             Description = "Reliable sedan with advanced safety features",
                             Name = "Toyota Corolla",
-                            Price = 20000m
+                            NewPrice = 20000m,
+                            OldPrice = 0m
                         },
                         new
                         {
@@ -149,35 +163,29 @@ namespace E_Commerce.InfraStructure.Data.Migrations
                             CategoryId = 1,
                             Description = "Stylish black leather jacket",
                             Name = "Leather Jacket",
-                            Price = 150m
+                            NewPrice = 150m,
+                            OldPrice = 0m
                         });
                 });
 
             modelBuilder.Entity("E_Commerce.Core.Entites.Product.Photo", b =>
                 {
-                    b.HasOne("E_Commerce.Core.Entites.Product.Product", "Product")
+                    b.HasOne("E_Commerce.Core.Entites.Product.Product", null)
                         .WithMany("photos")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("E_Commerce.Core.Entites.Product.Product", b =>
                 {
                     b.HasOne("E_Commerce.Core.Entites.Product.Category", "category")
-                        .WithMany("Products")
+                        .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("category");
-                });
-
-            modelBuilder.Entity("E_Commerce.Core.Entites.Product.Category", b =>
-                {
-                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("E_Commerce.Core.Entites.Product.Product", b =>

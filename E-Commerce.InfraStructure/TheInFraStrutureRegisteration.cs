@@ -1,9 +1,12 @@
 ﻿using E_Commerce.Core.InterFaces;
+using E_Commerce.Core.Services;
 using E_Commerce.InfraStructure.Data;
 using E_Commerce.InfraStructure.Repository;
+using E_Commerce.InfraStructure.Repository.Service;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 
 namespace E_Commerce.InfraStructure
 {
@@ -13,6 +16,11 @@ namespace E_Commerce.InfraStructure
         {
             Service.AddScoped(typeof( IGenericRepository<> ), typeof(GenericRepository<>));
             Service.AddScoped<IUnitOfWork, UnitOfWork>();
+            Service.AddScoped<IImageManagementService, ImageManagementService>();
+
+            Service.AddSingleton<IFileProvider>(
+                new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot"))
+            );
             Service.AddDbContext<AppDbContext>(l =>
             {
                 l.UseSqlServer(Configuration.GetConnectionString("Ecommerce"));

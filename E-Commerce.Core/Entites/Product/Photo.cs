@@ -8,9 +8,9 @@ namespace E_Commerce.Core.Entites.Product
 
 
 
-        public string Imagename { get; set; }
-        [ForeignKey(nameof(ProductId))]
+        public string ImageName { get; set; }
+        //[ForeignKey(nameof(ProductId))]
         public int ProductId { get; set; }
-        public virtual Product Product { get; set; }
+        //public virtual Product Product { get; set; }
     }
 }
