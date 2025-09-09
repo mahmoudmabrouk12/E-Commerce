@@ -17,7 +17,10 @@ namespace E_Commerce.InfraStructure.Data.Configuration
             {
                 Id = 1, ImageName = "Test" , ProductId = 1
                 
-            });
+            }
+            
+            
+            );
         }
     }
 }

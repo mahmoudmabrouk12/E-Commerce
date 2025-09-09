@@ -14,6 +14,7 @@ namespace E_Commerce.Core.InterFaces
         public Task<IReadOnlyList<T>> GetAllAsync(params Expression<Func<T,object >>[] Includes );
         public Task<T> GetByIdAsync(int Id, params Expression<Func<T, object>>[] Includes);
 
+        public Task<int> CountAsync();
 
 
     }

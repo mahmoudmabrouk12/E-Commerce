@@ -2,6 +2,7 @@
 using E_Commerce.Api.Helper;
 using E_Commerce.Core.DTOs;
 using E_Commerce.Core.InterFaces;
+using E_Commerce.Core.Sharing;
 using Microsoft.AspNetCore.Mvc;
 
 namespace E_Commerce.Api.Controllers
@@ -15,18 +16,15 @@ namespace E_Commerce.Api.Controllers
 
         [HttpGet]
         [Route("Get-All")]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery]ProductParams productParams)
         {
             try
             {
-                
-                var Products = await work.ProductRepository.GetAllAsync(l=>l.category ,
-                    l=>l.photos);
-                var result = mapper.Map<List<ProductDTO>>(Products);
 
-                if (Products is null)
-                    return BadRequest(new ResponseApi(400, "Invalid request data."));
-                return Ok(result);
+                var Products = await work.ProductRepository.GetAllAsync(productParams);
+
+
+                return Ok(new Pagination<ProductDTO>(productParams.PageSize , productParams.PageNumber, Products.TotalCount , Products.Products));
             }
             catch (Exception Ex)
             {
@@ -100,12 +98,12 @@ namespace E_Commerce.Api.Controllers
                 return Ok(value: new ResponseApi(200, "The Item Is Deleted"));
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw;
+                return BadRequest(error: new ResponseApi(StatusCode: 400, ex.Message));
             }
-        
+
         }
 
 

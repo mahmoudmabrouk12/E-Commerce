@@ -5,9 +5,12 @@ namespace E_Commerce.Core.DTOs
 {
     public record ProductDTO
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public decimal Price { get; set; }
+        public decimal NewPrice { get; set; }
+        public decimal OldPrice { get; set; }
+
         public virtual ICollection<Photo> photos { get; set; } = new List<Photo>();
         public string CategoryName { get; set; }
 
@@ -34,6 +37,11 @@ namespace E_Commerce.Core.DTOs
     public record UpdateProductDTO : AddProductDTO
     {
         public int Id { get; set; }
+    }
+    public record ReturnProductDTO
+    {
+        public int TotalCount { get; set; }
+        public List<ProductDTO> Products { get;  set; }
     }
 
 }

@@ -3,6 +3,7 @@ using E_Commerce.Core.DTOs;
 using E_Commerce.Core.Entites.Product;
 using E_Commerce.Core.InterFaces;
 using E_Commerce.Core.Services;
+using E_Commerce.Core.Sharing;
 using E_Commerce.InfraStructure.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,6 +21,55 @@ namespace E_Commerce.InfraStructure.Repository
             this.imageManagementService = imageManagementService;
         }
 
+        public async Task<ReturnProductDTO> GetAllAsync(ProductParams productParams)
+        {
+            var query = context.Products.Include(l => l.category)
+                .Include(l => l.photos).AsNoTracking();
+
+            if (!string.IsNullOrEmpty(productParams.Search))
+            {
+                var searchOfWords = productParams.Search
+                    .Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+                query = query.Where(l =>
+                    searchOfWords.All(word =>
+                        l.Name.ToLower().Contains(word.ToLower()) ||
+                        l.Description.ToLower().Contains(word.ToLower())
+                    )
+                );
+            }
+
+
+
+            if (productParams.categoryId.HasValue)
+            {
+                query = query.Where(l => l.CategoryId == productParams.categoryId);
+
+            }
+
+            if (!string.IsNullOrEmpty(productParams.Sort))
+            {
+                query = productParams.Sort switch
+                {
+                    "PriceAce" => query.OrderBy(l => l.NewPrice),
+                    "PriceDce" => query.OrderByDescending(l => l.OldPrice),
+                    _ => query.OrderBy(l => l.Name)
+                };
+            }
+
+            ReturnProductDTO returnProductDTO = new ReturnProductDTO();
+            returnProductDTO.TotalCount = query.Count();
+
+             query = query.Skip((productParams.PageSize) * (productParams.PageNumber - 1) ).Take(productParams.PageSize);
+
+
+
+            returnProductDTO.Products = mapper.Map<List<ProductDTO>>(query);
+            return returnProductDTO;
+
+
+
+        }
         public async Task<bool> AddAsync(AddProductDTO  productDTO)
         {
             if (productDTO == null) return false;
