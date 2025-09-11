@@ -10,7 +10,10 @@ namespace E_Commerce.InfraStructure.Data.Configuration
         {
             builder.Property(l => l.Name).IsRequired().HasMaxLength(maxLength: 100);
             builder.Property(l => l.Description).IsRequired().HasMaxLength(maxLength: 100);
-            builder.Property(l => l.NewPrice).IsRequired().HasColumnType("decimal()18,2)");
+            builder.Property( l => l.NewPrice).IsRequired().HasColumnType("decimal(18,2)");
+            builder.Property( propertyExpression: l => l.OldPrice).IsRequired().HasColumnType("decimal(18,2)");
+
+
 
             builder.HasData(new Product
             {

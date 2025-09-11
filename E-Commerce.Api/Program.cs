@@ -9,7 +9,6 @@ namespace E_Commerce.Api
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("CORSPolicy", policyBuilder =>
@@ -26,19 +25,10 @@ namespace E_Commerce.Api
             builder.Services.AddSwaggerGen();
             builder.Services.AddMemoryCache();
             builder.Services.InfraStructure(builder.Configuration);
-
-
-
-
-
-
-
-
             builder.Services.AddAutoMapper(cfg => { }, AppDomain.CurrentDomain.GetAssemblies());
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -46,12 +36,10 @@ namespace E_Commerce.Api
             }
             app.UseCors("CORSPolicy");
             app.UseMiddleware<ExceptionMiddleware>();
+            app.UseAuthentication();
+            app.UseAuthorization();
             app.UseStatusCodePagesWithReExecute("/Errors/{0}");
             app.UseHttpsRedirection();
-
-            app.UseAuthorization();
-
-
             app.MapControllers();
 
             app.Run();
