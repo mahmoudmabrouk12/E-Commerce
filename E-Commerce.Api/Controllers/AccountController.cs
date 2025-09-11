@@ -51,7 +51,7 @@ namespace E_Commerce.Api.Controllers
             return result ? Ok(new ResponseApi(200)) :
                 BadRequest(new ResponseApi(400));
         }
-        [HttpPost]
+        [HttpGet]
         [Route("Send-Email-Forget-Password")]
         public async Task<IActionResult> Forget( string email)
         {
