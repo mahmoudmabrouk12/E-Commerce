@@ -4,6 +4,7 @@ using E_Commerce.InfraStructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace E_Commerce.InfraStructure.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250911230410_OrdersTables")]
+    partial class OrdersTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,16 +51,6 @@ namespace E_Commerce.InfraStructure.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("DelivaryMethods");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            DelivaryTime = "5-7 days",
-                            Description = "Delivers in 5-7 business days",
-                            Name = "Standard Delivery",
-                            Price = 50m
-                        });
                 });
 
             modelBuilder.Entity("E_Commerce.Core.Entites.Order.OrderItems", b =>

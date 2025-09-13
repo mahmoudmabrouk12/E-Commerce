@@ -27,6 +27,7 @@ namespace E_Commerce.InfraStructure
             Service.AddScoped<IEmailService , EmailService>();
             Service.AddScoped<IGenerateToken, GenerateToken>();
             Service.AddScoped<IImageManagementService, ImageManagementService>();
+            Service.AddScoped<IOrderService, OrderService>();
             Service.AddSingleton<IConnectionMultiplexer>(i =>
             {
                 var config = Configuration.GetConnectionString("redis");

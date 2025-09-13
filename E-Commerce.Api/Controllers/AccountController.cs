@@ -1,9 +1,10 @@
 ﻿using AutoMapper;
 using E_Commerce.Api.Helper;
 using E_Commerce.Core.DTOs;
+using E_Commerce.Core.Entites.User;
 using E_Commerce.Core.InterFaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace E_Commerce.Api.Controllers
 {
@@ -13,6 +14,33 @@ namespace E_Commerce.Api.Controllers
         public AccountController(IUnitOfWork work, IMapper mapper) : base(work, mapper)
         {
         }
+        [HttpGet]
+        [Route("Get-Address-For-User")]
+        public async Task<IActionResult> GetAddress()
+        {
+
+            var adress = await work.Auth.GetUserAddress( User.FindFirst(ClaimTypes.Email)?.Value);
+            var result = mapper.Map<ShippAdressDTO>(adress);
+            return Ok(result);
+        }
+        [HttpGet]
+        [Route("Is-User-Auth")]
+        public async Task<IActionResult> ISAuth()
+        {
+            return User.Identity.IsAuthenticated  ? Ok(new ResponseApi(200)) :
+                BadRequest(new ResponseApi(400));
+        }
+        [HttpPut]
+        [Route("Update-Address")]
+        public async Task<IActionResult> Update( ShippAdressDTO shippAdressDTO)
+        {
+            var email = User.FindFirst(ClaimTypes.Email)?.Value;
+            var address = mapper.Map<Address>(shippAdressDTO);
+            var result = await work.Auth.UpdateAddress(email , address);
+            return result ? Ok(new ResponseApi(200)) :
+                BadRequest(new ResponseApi(400));
+        }
+
         [HttpPost]
         [Route("Register")]
         public async Task<IActionResult> Register(RegisterDTO registerDTO)
@@ -60,6 +88,19 @@ namespace E_Commerce.Api.Controllers
             return result ? Ok(new ResponseApi(200)) :
                 BadRequest(new ResponseApi(400));
         }
+        [HttpPost]
+        [Route("Reset-Password")]
+        public async Task<IActionResult> ResetPassword(ResetPasswordDTO resetPasswordDTO)
+        {
+            var result = await work.Auth.ResetPassword(resetPasswordDTO);
 
+            if (result is null)
+                return NotFound(new ResponseApi(404, "User not found."));
+
+            if (result == "The password has been reset successfully.")
+                return Ok(new ResponseApi(200, result));
+
+            return BadRequest(new ResponseApi(400, result));
+        }
     }
 }

@@ -15,7 +15,7 @@ namespace E_Commerce.InfraStructure.Data.Configuration
         {
             builder.HasData(new Photo
             {
-                Id = 1, ImageName = "Test" , ProductId = 1
+                Id = 1,ImageName = "Test" , ProductId = 1
                 
             }
             

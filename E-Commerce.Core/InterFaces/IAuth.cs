@@ -1,5 +1,6 @@
 ﻿
 using E_Commerce.Core.DTOs;
+using E_Commerce.Core.Entites.User;
 
 namespace E_Commerce.Core.InterFaces
 {
@@ -10,6 +11,8 @@ namespace E_Commerce.Core.InterFaces
         public  Task<bool> SendEmailForForgetPassWord(string email);
         public  Task<string> ResetPassword(ResetPasswordDTO resetPasswordDTO);
         public  Task<bool> ActiveAccount(ActiveAccountDTO activeAccountDTO);
+        public Task<bool> UpdateAddress(string email , Address address);
+        public Task<Address> GetUserAddress( string email);
 
 
     }

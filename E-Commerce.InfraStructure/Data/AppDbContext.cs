@@ -1,4 +1,5 @@
-﻿using E_Commerce.Core.Entites.Product;
+﻿using E_Commerce.Core.Entites.Order;
+using E_Commerce.Core.Entites.Product;
 using E_Commerce.Core.Entites.User;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +16,9 @@ namespace E_Commerce.InfraStructure.Data
         public virtual DbSet<Category>  Categories { get; set; }
         public virtual DbSet<Photo>      Photos { get; set; }
         public virtual DbSet<Address>    Addresses { get; set; }
-
+        public virtual DbSet<Orders> Orders { get; set; }
+        public virtual DbSet<DelivaryMethod> DelivaryMethods { get; set; }
+        public virtual DbSet<OrderItems> OrderItems { get; set; }    
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -23,10 +26,6 @@ namespace E_Commerce.InfraStructure.Data
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
-
-
-
-
 
     }
 }
